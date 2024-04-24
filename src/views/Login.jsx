@@ -8,6 +8,11 @@ import "./Login.less"
 import api from "../api/index"
 import _ from "../assets/utils"
 
+import { SM4 } from 'gm-crypto'
+
+const key = '0123456789abcdeffedcba9876543210'
+const originalData = 'SM4 国标对称加密'
+
 //自定义表单校验规则
 const validate = {
     phone(_,value){
@@ -41,8 +46,12 @@ function Login(props) {
             await formIns.validateFields()
             let {phone,code} = formIns.getFieldsValue()
 
+            const encryptedData = SM4.encrypt(code, key, {
+                inputEncoding: 'utf8',
+                outputEncoding: 'base64'
+            })
             //发请求
-            let { code:codeHttp,token } = await api.login(phone,code)
+            let { code: codeHttp,token } = await api.login(phone, encryptedData)
             if(+codeHttp !== 0){
                 Toast.show({
                     icon:"fail",

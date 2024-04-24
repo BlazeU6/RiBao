@@ -38,10 +38,10 @@ const sendPhoneCode = (phone) => {
 }
 
 //登录
-const login = (phone,code) =>{
+const login = (phone,encryptedData) =>{
     return http.post("/api/login",{
         phone,
-        code
+        encryptedData
     })
 }
 
